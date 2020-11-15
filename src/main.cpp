@@ -105,30 +105,69 @@ void old_leg() {
 void leg_it() {
   // The best leg+boot
 
-  display.clearDisplay();
-  int rows = 4;
-  int cols = 4;
-  int cellSize = 16;
-  for(int i = 0; i < cols; i++) {
-    for (int j = 0; j < rows; j++)
-    {
-      int col = BLACK;
-      if(random(2))
-        col = WHITE;
-      display.fillRect(i * cellSize, j * cellSize, cellSize, cellSize, col);
-    }
-    
+  int leg = 0;
+  if(digitalRead(BUTT) == LOW) {
+    leg = 9001;
+  }else {
+    leg = 0;
   }
-  display.refresh();
 
+  display.clearDisplay();
+  display.fillRect(0,0,400,240, WHITE);
+  if(leg > 0) {
+    // week statick
+    int rows = 24;
+    int cols = 14;
+    int cellSize = 16;
+    int cellWidth = random(cellSize);
+    for(int i = 1; i < rows; i++) {
+      for (int j = 1; j < cols; j++)
+      {
+        int col = BLACK;
+        if(random(2))
+          col = WHITE;
+        display.fillRect(i * cellSize, j * cellSize, cellWidth, cellSize, col);
+        for(int y = 0; y < cellSize; y ++) {
+          //display.drawFastHLine(i* cellSize, j*cellSize+y, 16, col);
+         // display.drawPixel(i* cellSize, j*cellSize+y, col);
+        }
+      }
+      
+    }
+  } else {
+      // hard black
+      display.fillRect(0,0,400,240,BLACK);
+    }
+  // display is 15 - 20 fps
+  // 66.666_ to 50 ms
+  display.refresh();
+  //delay(50);
+  
+}
+void input_update() {
+   if(digitalRead(BUTT) == LOW) {
+    freq = random(300);
+    tone(PIEZO, freq );
+  }else {
+    noTone(PIEZO);
+  }
 }
 
 void loop() {
   if(boot_sequence_completed == false) {
     old_leg();
-    delay(5000);
+    if(digitalRead(BUTT) == LOW) {
+      delay(5000);
+    }
     boot_it();
     boot_sequence_completed = true;
+  }
+  // The in PUT update
+  if(digitalRead(BUTT) == LOW) {
+    freq = random(300);
+    tone(PIEZO, freq );
+  }else {
+    noTone(PIEZO);
   }
   // leg_it!!;
   leg_it();
