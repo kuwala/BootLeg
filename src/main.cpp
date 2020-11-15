@@ -21,6 +21,8 @@ Adafruit_SharpMem display(SHARP_SCK, SHARP_MOSI, SHARP_SS, 400, 240);
 int freq = 400; // piezo frequency to play with tone()!
 unsigned int step = 0;
 
+int boot_sequence_completed = false;
+
 
 void setup() {
   pinMode(PIEZO, OUTPUT);
@@ -43,12 +45,46 @@ void setup() {
   display.clearDisplay();
 
 }
+void boot_it() {
+  //# show title sequence
 
-void loop() {
 
+  // --------------------------------------------
+  // ---------  display Logos -------------------
+  // ------------------shout--outs-------to--friends------their--doodles---logos---easter---------eggs-----------------
+  // ------- EEE -------------------------------------------------------
+  // --------------------------------------------
+  // -- display source code --- snippy 00000x0 --
+  // --------------------------------------------
+
+  // Toggle Fan
+
+  // Flash Screen
+
+  // Display Stats about system
+
+  // first created
+  
+  // uptime / downtime
+
+  // hex-kex files
+
+  // display qr codes
+
+  // play melodious icon-sounds
+
+  // Gibbered up speash! OSDIifisd89s9S*(Fg87sdfo98O(*))
+
+  // Display Seed Information - RNG
+
+
+}
+void old_leg() {
+  // this old leg is a vestigual ghost
+  // only left as reference and to weight down the poor device
+  // maybe someday via code surgery it can be removed...
   step++;
 
-  
   freq = random(2000) + 1200 ;
   //freq = random(400);
   
@@ -63,10 +99,62 @@ void loop() {
   display.drawBitmap(0,0, Title_Img, display.width(), display.height(), WHITE);
   //display.drawRect(random(240 - 40),random(400 - 40),40,40, WHITE);
   display.refresh();
-  
-  //delay(60);
 
-  //delay(500);
-  //display.clearDisplay();
+
+}
+void leg_it() {
+  // The best leg+boot
+
+  display.clearDisplay();
+  int rows = 4;
+  int cols = 4;
+  int cellSize = 16;
+  for(int i = 0; i < cols; i++) {
+    for (int j = 0; j < rows; j++)
+    {
+      int col = BLACK;
+      if(random(2))
+        col = WHITE;
+      display.fillRect(i * cellSize, j * cellSize, cellSize, cellSize, col);
+    }
+    
+  }
+  display.refresh();
+
+}
+
+void loop() {
+  if(boot_sequence_completed == false) {
+    old_leg();
+    delay(5000);
+    boot_it();
+    boot_sequence_completed = true;
+  }
+  // leg_it!!;
+  leg_it();
+  /* text story. The talking house says:
+  Hey there. You there. Hey.
+  You worm you. Can you help me out?
+  I need to get more 198239hf09d7tddj9.
+  can you bring me ___--- -spbshhhh ---.
+
+  I seamed to have ~ .... lost my __________.
+
+  */
+  
+  /* Tetris S house:
+  I am the S house.
+  S is for snake.
+  (Talks about missing letters)
+  How c an you remember what you forgot?
+  How do you know that you forgot something?
+  How I am missing letters in my vocabulary.
+  (He only accepts tetris pieces)
+  (shows you how many you have colleted)
+  Does not recognise letters. But is a hint
+  to the player that villagers have forget things
+  and their memories are curppeted. 
+  THe world is becoOCMSING cru___PT.
+  */
 
 }
