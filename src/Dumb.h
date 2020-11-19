@@ -6,6 +6,6 @@ class Dumb {
     int j;
     public:
     Dumb(int i) {
-    }
+    };
 };
 #endif
