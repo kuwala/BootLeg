@@ -1,0 +1,22 @@
+#ifndef BOARD_H
+#define BOARD_H
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_SharpMem.h>
+#define COLS 25
+#define ROWS 15
+#define BLACK 0
+#define WHITE 1
+
+class Board {
+    int cells[ROWS][COLS];
+    int cellSize;
+    //Adafruit_SharpMem& disp;
+    //public: Board(Adafruit_SharpMem& display):disp(display){
+    public:
+    Board(){ };
+    void init() {};
+    void draw() {};
+    
+};
+#endif

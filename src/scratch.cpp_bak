@@ -1,0 +1,66 @@
+
+void old_leg() {
+  // this old leg is a vestigual ghost
+  // only left as reference and to weight down the poor device
+  // maybe someday via code surgery it can be removed...
+  step++;
+
+  freq = random(2000) + 1200 ;
+  //freq = random(400);
+  
+  // when the button is pressed the input pin that is pulled high is drained into button output
+  if(digitalRead(BUTT) == LOW) {
+    freq = random(300);
+    tone(PIEZO, freq );
+  }else {
+    noTone(PIEZO);
+  }
+  display.fillRect(0,0,display.width(), display.height(), BLACK);
+  display.drawBitmap(0,0, Title_Img, display.width(), display.height(), WHITE);
+  //display.drawRect(random(240 - 40),random(400 - 40),40,40, WHITE);
+  display.refresh();
+
+
+}
+void leg_it() {
+  // The best leg+boot
+
+  int leg = 0;
+  if(digitalRead(BUTT) == LOW) {
+    leg = 9001;
+  }else {
+    leg = 0;
+  }
+
+  display.clearDisplay();
+  display.fillRect(0,0,400,240, WHITE);
+  if(leg > 0) {
+    // week statick
+    int rows = 24;
+    int cols = 13;
+    int cellSize = 16;
+    int cellWidth = random(cellSize);
+    for(int i = 1; i < rows; i++) {
+      for (int j = 1; j < cols; j++)
+      {
+        int col = BLACK;
+        if(random(2))
+          col = WHITE;
+        display.fillRect(i * cellSize, j * cellSize, cellWidth, cellSize, col);
+        for(int y = 0; y < cellSize; y ++) {
+          //display.drawFastHLine(i* cellSize, j*cellSize+y, 16, col);
+         // display.drawPixel(i* cellSize, j*cellSize+y, col);
+        }
+      }
+      
+    }
+  } else {
+      // hard black
+      display.fillRect(0,0,400,240,BLACK);
+    }
+  // display is 15 - 20 fps
+  // 66.666_ to 50 ms
+  display.refresh();
+  //delay(50);
+  
+}
