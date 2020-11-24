@@ -14,8 +14,13 @@ Adafruit_SharpMem display(SHARP_SCK, SHARP_MOSI, SHARP_SS, 400, 240);
 
 #define BLACK 0
 #define WHITE 1
-#define ROWS 15
-#define COLS 25
+#define ROWS 60
+#define COLS 100
+#define CELLSIZE 4
+#define GENPERFRAME 64
+#define STOPATGEN 2000
+long gensLeft = 2000;
+unsigned long gens = 0;
 
 int buttIn = 0;
 int board[COLS][ROWS];
@@ -25,13 +30,41 @@ int antLastX = COLS /2;
 int antLastY = ROWS /2;
 int dir = 0; // 0-E, 1-N, 2-W, 3-S. Based of Unit Circle angles
 
+/// # # # # #  SNAKE GAME # # # # # #
+#define SGCOLS 20
+#define SGROWS 20
+#define SGCELLSIZE 2
+
+int snakeX = 10; int snakeY = 10;
+int snakeBoard[20][20];
+int snakeDir = 0;
+
+void initSnakeBoard() {
+  for(int col = 0; col < SGCOLS; col++) {
+    for(int row = 0; row < SGROWS; row++) {
+      snakeBoard[col][row] = 0;
+    }
+  }
+}
+void initSnakeGame() {
+
+}
+int checkSnakeCollision() {
+  //get next move
+  return 0;
+
+}
+void moveSnake() {
+
+}
+
 void moveAnt() {
   // Flip Block and rotate ant
   int block = board[antX][antY];
   if(block == 0) { // clockwise
     board[antX][antY] = 1;
     dir = dir -1;
-    if(dir <0) {dir = 0;}
+    if(dir <0) {dir = 3;}
   } else if(block == 1){ //anti-clockwise
     board[antX][antY] = 0;
     dir = (dir +1) % 4;
@@ -41,20 +74,20 @@ void moveAnt() {
     antX = (antX +1) %COLS;
   } else if (dir==1) {
     antY = antY -1;
-    if(antY < 0) {antY=0;}
+    if(antY < 0) {antY=ROWS-1;}
   } else if (dir==2) {
     antX = antX -1;
-    if(antX < 0) {antX=0;}
+    if(antX < 0) {antX=COLS-1;}
   } else if( dir== 3) {
     antY = (antY+1)%ROWS;
   }
 
 }
 void drawAnt() {
-  int cellSize = 16;
+  int cellSize = CELLSIZE;
   int x = antX*cellSize;
   int y = antY*cellSize;
-  display.fillRect(x,y,16,16,BLACK);
+  display.fillRect(x,y,cellSize,cellSize,BLACK);
   display.setCursor(x+2,y);
   display.setTextColor(WHITE,BLACK);
   display.setTextSize(2);
@@ -62,15 +95,36 @@ void drawAnt() {
   display.print('A');
 }
 
-void initBoard() {
+void randoBoard() {
+    
     for(int i = 0; i < ROWS; i ++) {
         for(int j = 0; j < COLS; j ++ ) {
             board[j][i] = random(2);
         }
     }
 }
+void fillBoard(int x1, int y1, int x2, int y2, int cell) {
+    for(int i = y1; i < y2; i ++) {
+        for(int j = x1; j < x2; j ++ ) {
+            if(cell == -1) {
+              board[j][i] = random(2);
+            } else {
+              board[j][i] = cell;
+            }
+        }
+    }
+}
+void initBoard(int cell) {
+    
+    for(int i = 0; i < ROWS; i ++) {
+        for(int j = 0; j < COLS; j ++ ) {
+            //board[j][i] = random(2);
+            board[j][i] = cell;
+        }
+    }
+}
 void drawBoard() {
-  int cellSize = 16;
+  int cellSize = CELLSIZE;
   int padding = 0;
     for(int i = 0; i < ROWS; i ++) {
         for(int j = 0; j < COLS; j ++ ) {
@@ -205,7 +259,7 @@ void setup() {
   Serial.println("(-. - ) zzzZZZz!");
 
   // Init game objects
-  initBoard();
+  initBoard(0);
    // start & clear the display
   display.begin();
   display.clearDisplay();
@@ -282,6 +336,9 @@ void input_update() {
     freq = random(300);
     tone(PIEZO, freq );
     buttIn = 1;
+    fillBoard(10,10,20,20,-1);
+    gensLeft += 100;
+    
   }else {
     noTone(PIEZO);
     buttIn = 0;
@@ -333,7 +390,15 @@ drawBoard();
 
 
 if(buttIn == 1) {
-  moveAnt();
+}
+
+if(gensLeft > 0) {
+  for (int i = 0; i < GENPERFRAME; i++) {
+    moveAnt();
+    gens++;
+    gensLeft --;
+  }
+  
 }
 drawAnt();
 
@@ -342,13 +407,20 @@ display.setCursor(0,16);
 display.setTextColor(WHITE,BLACK);
 display.setTextSize(2);
 display.setTextWrap(true);
+display.print("Generations:");
+display.println(gens);
+display.print("Life: ");
+display.print(gensLeft);
 
 
+// Display Random Char River
+/*
 for(int i = 0; i < 99; i ++) {
   char c = 32+ random(256 - 32);
   if(c==127) { c= 32;}
   display.print(c);
 }
+*/
 
 display.refresh();
 //delay(40);
