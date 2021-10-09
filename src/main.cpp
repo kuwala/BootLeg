@@ -7,10 +7,13 @@
 
 
 // any pins can be used
-#define SHARP_SCK  14
-#define SHARP_MOSI 7
-#define SHARP_SS   30
+#define SHARP_SCK  13
+#define SHARP_MOSI 11
+// Pin 30 for breadboard, Pin 10 for DMG-1 version
+#define SHARP_SS   10
+
 Adafruit_SharpMem display(SHARP_SCK, SHARP_MOSI, SHARP_SS, 400, 240);
+Input input;
 
 #define BLACK 0
 #define WHITE 1
@@ -19,7 +22,7 @@ Adafruit_SharpMem display(SHARP_SCK, SHARP_MOSI, SHARP_SS, 400, 240);
 #define CELLSIZE 4
 #define GENPERFRAME 64
 #define STOPATGEN 2000
-long gensLeft = 2000;
+long gensLeft = 2000 * 100;
 unsigned long gens = 0;
 
 int buttIn = 0;
@@ -253,11 +256,12 @@ void setup() {
 
   pinMode(PIEZO, OUTPUT);
   pinMode(PIEZO_SINK, INPUT_PULLDOWN);
-  pinMode(BUTT, INPUT_PULLUP);
+  //pinMode(BUTT, INPUT_PULLUP);
 
   Serial.begin(9600);
   Serial.println("(-. - ) zzzZZZz!");
 
+  input.begin();
   // Init game objects
   initBoard(0);
    // start & clear the display
@@ -269,7 +273,7 @@ void setup() {
   display.drawBitmap(0,0,Title_Img, 400, 240, WHITE);
   display.fillRect(16,16,16,32, BLACK);
   display.refresh();
-  delay(500);
+  delay(2000);
   if(digitalRead(BUTT) == LOW) {
     display.fillRect(16,16,16,32, WHITE);
     display.refresh();
@@ -332,7 +336,9 @@ void boot_it() {
 
 }
 void input_update() {
-   if(digitalRead(BUTT) == LOW) {
+  input.update();
+  // Button pins are pullup so, LOW means button is pressed
+   if(input.getButton(0) == LOW) {
     freq = random(300);
     tone(PIEZO, freq );
     buttIn = 1;
