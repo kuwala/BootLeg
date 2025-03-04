@@ -17,12 +17,13 @@ Input input;
 
 #define BLACK 0
 #define WHITE 1
-#define ROWS 60
-#define COLS 100
-#define CELLSIZE 4
+#define ROWS 80
+#define COLS 133
+#define CELLSIZE 3
 #define GENPERFRAME 64
 #define STOPATGEN 2000
-long gensLeft = 2000 * 100;
+// long gensLeft = 2000 * 100;
+long gensLeft = 2147483647; // 2^31 = 2147483648
 unsigned long gens = 0;
 
 int buttIn = 0;
@@ -90,7 +91,7 @@ void drawAnt() {
   int cellSize = CELLSIZE;
   int x = antX*cellSize;
   int y = antY*cellSize;
-  display.fillRect(x,y,cellSize,cellSize,BLACK);
+  //display.fillRect(x,y,cellSize,cellSize,BLACK);
   display.setCursor(x+2,y);
   display.setTextColor(WHITE,BLACK);
   display.setTextSize(2);
@@ -353,7 +354,7 @@ void input_update() {
 }
 
 void loop() {
-  // The in PUT update
+ // The in PUT update
   /*if(digitalRead(BUTT) == LOW) {
     freq = random(300);
     tone(PIEZO, freq );
@@ -379,13 +380,7 @@ void loop() {
  } 
  */
  
- for(int i = 0; i < 10; i ++ ) {
-     if(step % 2 == 1) {
-      display.drawLine(random(400),random(240),random(400),random(240),  WHITE);
-     } else {
-      display.drawLine(random(400),random(240),random(400),random(240),  BLACK);
-     }
- }
+ 
  
 //display.clearDisplay();
 //board.draw();
@@ -394,6 +389,13 @@ display.drawRect(0,0,400,240, BLACK);
 display.fillScreen(WHITE);
 drawBoard();
 
+for(int i = 0; i < 10; i ++ ) {
+  if(step % 2 == 1) {
+   display.drawLine(random(400),random(240),random(400),random(240),  WHITE);
+  } else {
+   display.drawLine(random(400),random(240),random(400),random(240),  BLACK);
+  }
+}
 
 if(buttIn == 1) {
 }

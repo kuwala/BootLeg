@@ -7,8 +7,8 @@
 
 class Input {
     // Buttons 1-4, Knobs 1-2
-    int values[6] = {0,0,0,0,0,0};
     public:
+    int values[6] = {0,0,0,0,0,0};
     Input() {
 
     }

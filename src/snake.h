@@ -16,7 +16,9 @@ class Snake {
     }
     void update(Input& input) {
     
-        if(input.button1() == 1) {
+        // if(input.button1() == 1) {
+        {
+            
 
         }
     }
